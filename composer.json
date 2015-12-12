@@ -1,0 +1,20 @@
+{
+    "name": "ericmartel/codeception-email-mailhog",
+    "description": "Provides test helpers for Codeception when testing email functionality with MailHog",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eric Martel",
+            "email": "emartel@gmail.com"
+        }
+    ],
+    "require": {
+        "ericmartel/codeception-email": "dev-master",
+        "guzzle/guzzle": "3.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Codeception\\Module\\": "src"
+        }
+    }
+}
