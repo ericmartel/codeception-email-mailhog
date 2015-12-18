@@ -10,7 +10,7 @@
     ],
     "require": {
         "ericmartel/codeception-email": "dev-master",
-        "guzzlehttp/guzzle": "6.*"
+        "guzzlehttp/guzzle": "^6.1"
     },
     "autoload": {
         "psr-4": {
