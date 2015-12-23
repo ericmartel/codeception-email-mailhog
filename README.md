@@ -2,6 +2,61 @@
 
 This Codeception Module implements the required methods to test emails using the [Codeception Email Testing Framework][CodeceptionEmailTestingFramework] with [MailHog]
 
+### Added Methods
+This Module adds a few public methods for the user, such as:
+```
+deleteAllEmails()
+```
+Deletes all emails in MailHog
+```
+fetchEmails()
+```
+Fetches all email headers from MailHog, sorts them by timestamp and assigns them to the current and unread inboxes
+```
+accessInboxFor($address)
+```
+Filters emails to only keep those that are received by the provided address
+```
+openNextUnreadEmail()
+```
+Pops the most recent unread email and assigns it as the email to conduct tests on
+
+### Example Test
+Here is a simple scenario where we test the content of an email.  For a detailed list of all available test methods, please refer to the [Codeception Email Testing Framework][CodeceptionEmailTestingFramework].
+```
+<?php 
+$I = new FunctionalTester($scenario);
+$I->am('a member');
+$I->wantTo('request a reset password link');
+
+// First, remove all existing emails in the MailHog inbox
+$I->deleteAllEmails();
+
+// Implementation is up to the user, use this as an example
+$I->requestAPasswordResetLink();
+
+// Query MailHog and fetch all available emails
+$I->fetchEmails();
+
+// This is optional, but will filter the emails in case you're sending multiple emails or use the BCC field
+$I->accessInboxFor('testuser@example.com');
+
+// A new email should be available and it should be unread
+$I->haveEmails();
+$I->haveUnreadEmails();
+
+// Set the next unread email as the email to perform operations on
+$I->openNextUnreadEmail();
+
+// After opening the only available email, the unread inbox should be empty
+$I->dontHaveUnreadEmails();
+
+// Validate the content of the opened email, all of these operations are performed on the same email
+$I->seeInOpenedEmailSubject('Your Password Reset Link');
+$I->seeInOpenedEmailBody('Follow this link to reset your password');
+$I->seeInOpenedEmailRecipients('testuser@example.com');
+```
+
 ### License
 Copyright (c) 2015 Eric Martel, http://github.com/ericmartel <emartel@gmail.com>
 
