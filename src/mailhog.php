@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Mailhog service provider for the Codeception Email Testing Framework.
+ * (c) 2015 Eric Martel
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Codeception\Module;
 
 use Codeception\Module;
@@ -7,6 +15,8 @@ use Codeception\Module;
 class MailHog extends Module
 {
   use \Codeception\Email\TestsEmails;
+
+  use \Codeception\Email\EmailServiceProvider;
 
   /**
    * HTTP Client to interact with MailHog
@@ -331,7 +341,7 @@ class MailHog extends Module
   }
 
   /**
-   * Set Current Inbox
+   * Get Current Inbox
    *
    * Returns the complete current inbox
    *
@@ -343,7 +353,7 @@ class MailHog extends Module
   }
 
   /**
-   * Set Current Inbox
+   * Get Unread Inbox
    *
    * Returns the inbox containing unread emails
    *
