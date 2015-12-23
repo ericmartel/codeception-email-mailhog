@@ -291,7 +291,11 @@ class MailHog extends Module
    */
   protected function getEmailBCC($email)
   {
-    return $email->Content->Headers->Bcc[0];
+    if(isset($email->Content->Headers->Bcc))
+    {
+      return $email->Content->Headers->Bcc[0];
+    }
+    return "";
   }
 
   /**
