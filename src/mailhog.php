@@ -326,9 +326,35 @@ class MailHog extends Module
    * @param mixed $email Email
    * @return string Sender
    */
-  protected function getSender($email)
+  protected function getEmailSender($email)
   {
-    return $email->Content->Headers->Sender;
+    return $email->Content->Headers->From[0];
+  }
+
+  /**
+   * Get Email Reply To
+   *
+   * Returns the string containing the address to reply to
+   *
+   * @param mixed $email Email
+   * @return string ReplyTo
+   */
+  protected function getEmailReplyTo($email)
+  {
+    return $email->Content->Headers->{'Reply-To'}[0];
+  }
+
+  /**
+   * Get Email Priority
+   * 
+   * Returns the priority of the email
+   * 
+   * @param mixed $email Email
+   * @return string Priority
+   */
+  protected function getEmailPriority($email)
+  {
+    return $email->Content->Headers->{'X-Priority'}[0];
   }
 
   /**
