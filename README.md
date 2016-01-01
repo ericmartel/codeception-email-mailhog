@@ -2,6 +2,27 @@
 
 This Codeception Module implements the required methods to test emails using the [Codeception Email Testing Framework][CodeceptionEmailTestingFramework] with [MailHog]
 
+### Installation
+Through composer, require the package:
+```
+"require-dev": {
+        "ericmartel/codeception-email-mailhog": "^1.0"
+    }
+```
+Then turn it on in your Codeception suite yaml file
+```
+class_name: FunctionalTester
+modules:
+    enabled:
+        - MailHog
+    config:
+        MailHog:
+            url: 'http://mailhog.dev'
+            port: '8025'
+```
+Additional parameters can be fed directly to the Guzzle connection using the `guzzleRequestOptions` variable.
+
+The variable `deleteEmailsAfterScenario` can be set to true to ensure that all emails are deleted at the end of each scenario, but it is turned off by default.
 ### Added Methods
 This Module adds a few public methods for the user, such as:
 ```
