@@ -2,7 +2,7 @@
 
 /*
  * This file is part of the Mailhog service provider for the Codeception Email Testing Framework.
- * (c) 2015 Eric Martel
+ * (c) 2015-2016 Eric Martel
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
