@@ -83,7 +83,7 @@ class MailHog extends Module
   /** 
    * Method executed after each scenario
    */
-  public function _after()
+  public function _after(\Codeception\TestCase $test)
   {
     if(isset($this->config['deleteEmailsAfterScenario']) && $this->config['deleteEmailsAfterScenario'])
     {
