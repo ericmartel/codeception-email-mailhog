@@ -148,7 +148,7 @@ class MailHog extends Module
     {
       if(!isset($email->Content->Headers->Bcc))
       {
-        if(strpos($email->Content->Headers->To[0], $addressPlusDelimiters) || array_search($email->Content->Headers->Cc[0], $addressPlusDelimiters))
+        if(strpos($email->Content->Headers->To[0], $addressPlusDelimiters) || (isset($email->Content->Headers->Cc) && array_search($email->Content->Headers->Cc[0], $addressPlusDelimiters)))
         {
           array_push($inbox, $email);
         }
