@@ -308,12 +308,18 @@ class MailHog extends Module
    */
   protected function getEmailRecipients($email)
   {
-    $recipients = $email->Content->Headers->To[0] . ' ' .
-                  $email->Content->Headers->Cc[0];
-    if(isset($email->Content->Headers->Bcc))
-    {
-      $recipients .= ' ' . $email->Content->Headers->Bcc[0];  
+    $recipients = [];
+    if (isset($email->Content->Headers->To)) {
+      $recipients[] = $email->Content->Headers->To[0];
     }
+    if (isset($email->Content->Headers->Cc)) {
+      $recipients[] = $email->Content->Headers->Cc[0];
+    }
+    if(isset($email->Content->Headers->Bcc)) {
+      $recipients[] = $email->Content->Headers->Bcc[0];
+    }
+    
+    $recipients = implode(' ', $recipients);
 
     return $recipients;
   }
