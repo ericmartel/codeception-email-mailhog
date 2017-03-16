@@ -147,12 +147,12 @@ class MailHog extends Module
     {
       if(!isset($email->Content->Headers->Bcc))
       {
-        if(strpos($email->Content->Headers->To[0], $address) || (isset($email->Content->Headers->Cc) && array_search($email->Content->Headers->Cc[0], $address)))
+        if(strpos($email->Content->Headers->To[0], $address) !== FALSE || (isset($email->Content->Headers->Cc) && array_search($email->Content->Headers->Cc[0], $address)))
         {
           array_push($inbox, $email);
         }
       }
-      else if(strpos($email->Content->Headers->Bcc[0], $address))
+      else if(strpos($email->Content->Headers->Bcc[0], $address) !== FALSE)
       {
         array_push($inbox, $email);
       }
