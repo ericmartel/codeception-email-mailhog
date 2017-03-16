@@ -80,7 +80,7 @@ class MailHog extends Module
     }
   }
 
-  /** 
+  /**
    * Method executed after each scenario
    */
   public function _after(\Codeception\TestCase $test)
@@ -91,10 +91,10 @@ class MailHog extends Module
     }
   }
 
-  /** 
+  /**
    * Delete All Emails
    *
-   * Accessible from tests, deletes all emails 
+   * Accessible from tests, deletes all emails
    */
   public function deleteAllEmails()
   {
@@ -108,10 +108,10 @@ class MailHog extends Module
     }
   }
 
-  /** 
+  /**
    * Fetch Emails
    *
-   * Accessible from tests, fetches all emails 
+   * Accessible from tests, fetches all emails
    */
   public function fetchEmails()
   {
@@ -133,9 +133,9 @@ class MailHog extends Module
     $this->setCurrentInbox($this->fetchedEmails);
   }
 
-  /** 
+  /**
    * Access Inbox For
-   * 
+   *
    * Filters emails to only keep those that are received by the provided address
    *
    * @param string $address Recipient address' inbox
@@ -143,17 +143,16 @@ class MailHog extends Module
   public function accessInboxFor($address)
   {
     $inbox = array();
-    $addressPlusDelimiters = '<' . $address . '>';
     foreach($this->fetchedEmails as $email)
     {
       if(!isset($email->Content->Headers->Bcc))
       {
-        if(strpos($email->Content->Headers->To[0], $addressPlusDelimiters) || (isset($email->Content->Headers->Cc) && array_search($email->Content->Headers->Cc[0], $addressPlusDelimiters)))
+        if(strpos($email->Content->Headers->To[0], $address) || (isset($email->Content->Headers->Cc) && array_search($email->Content->Headers->Cc[0], $address)))
         {
           array_push($inbox, $email);
         }
       }
-      else if(strpos($email->Content->Headers->Bcc[0], $addressPlusDelimiters))
+      else if(strpos($email->Content->Headers->Bcc[0], $address))
       {
         array_push($inbox, $email);
       }
@@ -161,7 +160,7 @@ class MailHog extends Module
     $this->setCurrentInbox($inbox);
   }
 
-  /** 
+  /**
    * Open Next Unread Email
    *
    * Pops the most recent unread email and assigns it as the email to conduct tests on
@@ -191,9 +190,9 @@ class MailHog extends Module
 
   /**
    * Get Most Recent Unread Email
-   * 
+   *
    * Pops the most recent unread email, fails if the inbox is empty
-   * 
+   *
    * @return mixed Returns a JSON encoded Email
    */
   protected function getMostRecentUnreadEmail()
@@ -209,7 +208,7 @@ class MailHog extends Module
 
   /**
    * Get Full Email
-   * 
+   *
    * Returns the full content of an email
    *
    * @param string $id ID from the header
@@ -318,7 +317,7 @@ class MailHog extends Module
     if(isset($email->Content->Headers->Bcc)) {
       $recipients[] = $email->Content->Headers->Bcc[0];
     }
-    
+
     $recipients = implode(' ', $recipients);
 
     return $recipients;
@@ -352,9 +351,9 @@ class MailHog extends Module
 
   /**
    * Get Email Priority
-   * 
+   *
    * Returns the priority of the email
-   * 
+   *
    * @param mixed $email Email
    * @return string Priority
    */
@@ -421,7 +420,7 @@ class MailHog extends Module
    * @param mixed $emailB Email
    * @return int Which email should go first
    */
-  static function sortEmailsByCreationDatePredicate($emailA, $emailB) 
+  static function sortEmailsByCreationDatePredicate($emailA, $emailB)
   {
     $sortKeyA = $emailA->Content->Headers->Date;
     $sortKeyB = $emailB->Content->Headers->Date;
