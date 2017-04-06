@@ -251,6 +251,11 @@ class MailHog extends Module
    */
   protected function getEmailBody($email)
   {
+    if (!empty($email->Content->Headers->{'Content-Transfer-Encoding'}) &&
+      in_array('quoted-printable', $email->Content->Headers->{'Content-Transfer-Encoding'})
+    ) {
+      return quoted_printable_decode($email->Content->Body);
+    }
     return $email->Content->Body;
   }
 
