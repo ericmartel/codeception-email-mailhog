@@ -379,7 +379,7 @@ class MailHog extends Module
       ) {
         $property = quoted_printable_decode($property);
       }
-      if (extension_loaded('mbstring')) {
+      if (strpos($property, '=?utf-8?Q?') !== false && extension_loaded('mbstring')) {
         $property = mb_decode_mimeheader($property);
       }
     }
