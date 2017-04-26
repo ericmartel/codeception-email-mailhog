@@ -238,7 +238,7 @@ class MailHog extends Module
    */
   protected function getEmailSubject($email)
   {
-    return $email->Content->Headers->Subject[0];
+    return $this->getDecodedEmailProperty($email, $email->Content->Headers->Subject[0]);
   }
 
   /**
@@ -251,12 +251,7 @@ class MailHog extends Module
    */
   protected function getEmailBody($email)
   {
-    if (!empty($email->Content->Headers->{'Content-Transfer-Encoding'}) &&
-      in_array('quoted-printable', $email->Content->Headers->{'Content-Transfer-Encoding'})
-    ) {
-      return quoted_printable_decode($email->Content->Body);
-    }
-    return $email->Content->Body;
+    return $this->getDecodedEmailProperty($email, $email->Content->Body);
   }
 
   /**
@@ -269,7 +264,7 @@ class MailHog extends Module
    */
   protected function getEmailTo($email)
   {
-    return $email->Content->Headers->To[0];
+    return $this->getDecodedEmailProperty($email, $email->Content->Headers->To[0]);
   }
 
   /**
@@ -282,7 +277,11 @@ class MailHog extends Module
    */
   protected function getEmailCC($email)
   {
-    return $email->Content->Headers->Cc[0];
+    $emailCc = '';
+    if (isset($email->Content->Headers->Cc)) {
+      $emailCc = $this->getDecodedEmailProperty($email, $email->Content->Headers->Cc[0]);
+    }
+    return $emailCc;
   }
 
   /**
@@ -295,11 +294,11 @@ class MailHog extends Module
    */
   protected function getEmailBCC($email)
   {
-    if(isset($email->Content->Headers->Bcc))
-    {
-      return $email->Content->Headers->Bcc[0];
+    $emailBcc = '';
+    if (isset($email->Content->Headers->Bcc)) {
+      $emailBcc = $this->getDecodedEmailProperty($email, $email->Content->Headers->Bcc[0]);
     }
-    return "";
+    return $emailBcc;
   }
 
   /**
@@ -314,13 +313,13 @@ class MailHog extends Module
   {
     $recipients = [];
     if (isset($email->Content->Headers->To)) {
-      $recipients[] = $email->Content->Headers->To[0];
+      $recipients[] = $this->getEmailTo($email);
     }
     if (isset($email->Content->Headers->Cc)) {
-      $recipients[] = $email->Content->Headers->Cc[0];
+      $recipients[] = $this->getEmailCC($email);
     }
     if(isset($email->Content->Headers->Bcc)) {
-      $recipients[] = $email->Content->Headers->Bcc[0];
+      $recipients[] = $this->getEmailBCC($email);
     }
 
     $recipients = implode(' ', $recipients);
@@ -338,7 +337,7 @@ class MailHog extends Module
    */
   protected function getEmailSender($email)
   {
-    return $email->Content->Headers->From[0];
+    return $this->getDecodedEmailProperty($email, $email->Content->Headers->From[0]);
   }
 
   /**
@@ -351,7 +350,7 @@ class MailHog extends Module
    */
   protected function getEmailReplyTo($email)
   {
-    return $email->Content->Headers->{'Reply-To'}[0];
+    return $this->getDecodedEmailProperty($email, $email->Content->Headers->{'Reply-To'}[0]);
   }
 
   /**
@@ -364,7 +363,27 @@ class MailHog extends Module
    */
   protected function getEmailPriority($email)
   {
-    return $email->Content->Headers->{'X-Priority'}[0];
+    return $this->getDecodedEmailProperty($email, $email->Content->Headers->{'X-Priority'}[0]);
+  }
+
+  /**
+   * Returns the decoded email property
+   *
+   * @param string $property
+   * @return string
+   */
+  protected function getDecodedEmailProperty($email, $property) {
+    if ((string)$property != '') {
+      if (!empty($email->Content->Headers->{'Content-Transfer-Encoding'}) &&
+        in_array('quoted-printable', $email->Content->Headers->{'Content-Transfer-Encoding'})
+      ) {
+        $property = quoted_printable_decode($property);
+      }
+      if (strpos($property, '=?utf-8?Q?') !== false && extension_loaded('mbstring')) {
+        $property = mb_decode_mimeheader($property);
+      }
+    }
+    return $property;
   }
 
   /**
