@@ -379,6 +379,11 @@ class MailHog extends Module
       ) {
         $property = quoted_printable_decode($property);
       }
+      if (!empty($email->Content->Headers->{'Content-Type'}[0]) &&
+          strpos($email->Content->Headers->{'Content-Type'}[0], 'multipart/mixed') !== false
+      ) {
+          $property = quoted_printable_decode($property);
+      }
       if (strpos($property, '=?utf-8?Q?') !== false && extension_loaded('mbstring')) {
         $property = mb_decode_mimeheader($property);
       }
