@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "ericmartel/codeception-email": "^1.0",
+        "ericmartel/codeception-email": "dev-master",
         "guzzlehttp/guzzle": "^6.1"
     },
     "autoload": {
