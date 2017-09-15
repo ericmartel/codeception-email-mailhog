@@ -143,19 +143,20 @@ class MailHog extends Module
   public function accessInboxFor($address)
   {
     $inbox = array();
+
     foreach($this->fetchedEmails as $email)
     {
-      if(!isset($email->Content->Headers->Bcc))
-      {
-        if(strpos($email->Content->Headers->To[0], $address) !== FALSE || (isset($email->Content->Headers->Cc) && array_search($address, $email->Content->Headers->Cc)))
-        {
-          array_push($inbox, $email);
+        if (strpos($email->Content->Headers->To[0], $address) !== false) {
+            array_push($inbox, $email);
         }
-      }
-      else if(strpos($email->Content->Headers->Bcc[0], $address) !== FALSE)
-      {
-        array_push($inbox, $email);
-      }
+
+        if (isset($email->Content->Headers->Cc) && array_search($address, $email->Content->Headers->Cc)) {
+            array_push($inbox, $email);
+        }
+
+        if (isset($email->Content->Headers->Bcc) && array_search($address, $email->Content->Headers->Bcc)) {
+            array_push($inbox, $email);
+        }
     }
     $this->setCurrentInbox($inbox);
   }
