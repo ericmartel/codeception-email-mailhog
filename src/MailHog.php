@@ -133,25 +133,89 @@ class MailHog extends Module
     $this->setCurrentInbox($this->fetchedEmails);
   }
 
-  /**
-   * Access Inbox For
-   *
-   * Filters emails to only keep those that are received by the provided address
-   *
-   * @param string $address Recipient address' inbox
-   */
-  public function accessInboxFor($address)
-  {
-    $inbox = array();
-
-    foreach($this->fetchedEmails as $email)
+    /**
+     * Access Inbox For *
+     *
+     * Filters emails to only keep those that are received by the provided address
+     *
+     * @param string $address Recipient address' inbox
+     */
+    public function accessInboxFor($address)
     {
-        if (strpos($email->Content->Headers->To[0], $address) !== false) {
-            array_push($inbox, $email);
+        $inbox = array();
+
+        foreach ($this->fetchedEmails as $email) {
+            if (strpos($email->Content->Headers->To[0], $address) !== false) {
+                array_push($inbox, $email);
+            }
+
+            if (isset($email->Content->Headers->Cc) && array_search($address, $email->Content->Headers->Cc)) {
+                array_push($inbox, $email);
+            }
+
+            if (isset($email->Content->Headers->Bcc) && array_search($address, $email->Content->Headers->Bcc)) {
+                array_push($inbox, $email);
+            }
         }
+        $this->setCurrentInbox($inbox);
     }
-    $this->setCurrentInbox($inbox);
-  }
+
+    /**
+     * Access Inbox For To
+     *
+     * Filters emails to only keep those that are received by the provided address
+     *
+     * @param string $address Recipient address' inbox
+     */
+    public function accessInboxForTo($address)
+    {
+        $inbox = array();
+
+        foreach ($this->fetchedEmails as $email) {
+            if (strpos($email->Content->Headers->To[0], $address) !== false) {
+                array_push($inbox, $email);
+            }
+        }
+        $this->setCurrentInbox($inbox);
+    }
+
+    /**
+     * Access Inbox For CC
+     *
+     * Filters emails to only keep those that are received by the provided address
+     *
+     * @param string $address Recipient address' inbox
+     */
+    public function accessInboxForCc($address)
+    {
+        $inbox = array();
+
+        foreach ($this->fetchedEmails as $email) {
+            if (isset($email->Content->Headers->Cc) && array_search($address, $email->Content->Headers->Cc)) {
+                array_push($inbox, $email);
+            }
+        }
+        $this->setCurrentInbox($inbox);
+    }
+
+    /**
+     * Access Inbox For BCC
+     *
+     * Filters emails to only keep those that are received by the provided address
+     *
+     * @param string $address Recipient address' inbox
+     */
+    public function accessInboxForBcc($address)
+    {
+        $inbox = array();
+
+        foreach ($this->fetchedEmails as $email) {
+            if (isset($email->Content->Headers->Bcc) && array_search($address, $email->Content->Headers->Bcc)) {
+                array_push($inbox, $email);
+            }
+        }
+        $this->setCurrentInbox($inbox);
+    }
 
   /**
    * Open Next Unread Email
