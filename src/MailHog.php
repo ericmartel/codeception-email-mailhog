@@ -58,7 +58,7 @@ class MailHog extends Module
    *
    * @var array
    */
-  protected $config = array('url', 'port', 'guzzleRequestOptions', 'deleteEmailsAfterScenario');
+  protected $config = array('url', 'port', 'guzzleRequestOptions', 'deleteEmailsAfterScenario', 'timeout');
 
   /**
    * Codeception required variables
@@ -71,7 +71,10 @@ class MailHog extends Module
   {
     $url = trim($this->config['url'], '/') . ':' . $this->config['port'];
 
-    $this->mailhog = new \GuzzleHttp\Client(['base_uri' => $url, 'timeout' => 1.0]);
+    $timeout = 1.0;
+    if(isset($this->config['timeout']))
+        $timeout = $this->config['timeout'];
+    $this->mailhog = new \GuzzleHttp\Client(['base_uri' => $url, 'timeout' => $timeout]);
 
     if (isset($this->config['guzzleRequestOptions'])) {
         foreach ($this->config['guzzleRequestOptions'] as $option => $value) {
