@@ -444,6 +444,12 @@ class MailHog extends Module
       ) {
           $property = quoted_printable_decode($property);
       }
+      if (strpos($property, 'Content-Transfer-Encoding: quoted-printable') !== false) {
+          $property = quoted_printable_decode($property);
+      }
+      if (strpos($property, 'Content-Type: text/html') !== false) {
+          $property = html_entity_decode($property,  ENT_QUOTES, 'UTF-8');
+      }
       if (strpos($property, '=?utf-8?Q?') !== false && extension_loaded('mbstring')) {
         $property = mb_decode_mimeheader($property);
       }
