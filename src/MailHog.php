@@ -74,13 +74,10 @@ class MailHog extends Module
     $timeout = 1.0;
     if(isset($this->config['timeout']))
         $timeout = $this->config['timeout'];
-    $this->mailhog = new \GuzzleHttp\Client(['base_uri' => $url, 'timeout' => $timeout]);
-
-    if (isset($this->config['guzzleRequestOptions'])) {
-        foreach ($this->config['guzzleRequestOptions'] as $option => $value) {
-            $this->mailhog->setDefaultOption($option, $value);
-        }
-    }
+    
+    $options = ['base_uri' => $url, 'timeout' => $timeout];
+    
+    $this->mailhog = new \GuzzleHttp\Client(array_merge($options, $this->config['guzzleRequestOptions'] ?? []));
   }
 
   /**
