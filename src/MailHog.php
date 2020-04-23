@@ -444,7 +444,7 @@ class MailHog extends Module
       ) {
           $property = quoted_printable_decode($property);
       }
-      if (strpos($property, '=?utf-8?Q?') !== false && extension_loaded('mbstring')) {
+      if (stripos($property, '=?utf-8?Q?') !== false && extension_loaded('mbstring')) {
         $property = mb_decode_mimeheader($property);
       }
     }
