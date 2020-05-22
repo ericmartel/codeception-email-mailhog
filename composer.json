@@ -6,11 +6,22 @@
         {
             "name": "Eric Martel",
             "email": "emartel@gmail.com"
+        },
+        {
+            "name": "Lamoda developers",
+            "homepage": "https://tech.lamoda.ru/"
         }
     ],
     "require": {
+        "php": "~7.1",
+        "guzzlehttp/guzzle": "^6.1",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "codeception/codeception": "^4.0",
         "ericmartel/codeception-email": "^1.0",
-        "guzzlehttp/guzzle": "^6.1"
+        "friendsofphp/php-cs-fixer": "^2.15.0"
     },
     "autoload": {
         "psr-4": {
