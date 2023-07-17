@@ -11,6 +11,8 @@
 namespace Codeception\Module;
 
 use Codeception\Module;
+use Codeception\TestInterface;
+use Exception;
 
 class MailHog extends Module
 {
@@ -26,46 +28,46 @@ class MailHog extends Module
     /**
      * Raw email header data converted to JSON
      *
-     * @var array
+     * @var array<object>
      */
     protected $fetchedEmails;
 
     /**
      * Currently selected set of email headers to work with
      *
-     * @var array
+     * @var array<object>
      */
     protected $currentInbox;
 
     /**
      * Starts as the same data as the current inbox, but items are removed as they're used
      *
-     * @var array
+     * @var array<object>
      */
     protected $unreadInbox;
 
     /**
      * Contains the currently open email on which test operations are conducted
      *
-     * @var mixed
+     * @var object
      */
     protected $openedEmail;
 
     /**
      * Codeception exposed variables
      *
-     * @var array
+     * @var array<string>
      */
-    protected $config = ['url', 'port', 'guzzleRequestOptions', 'deleteEmailsAfterScenario', 'timeout'];
+    protected array $config = ['url', 'port', 'deleteEmailsAfterScenario', 'timeout'];
 
     /**
      * Codeception required variables
      *
-     * @var array
+     * @var array<string>
      */
-    protected $requiredFields = ['url', 'port'];
+    protected array $requiredFields = ['url', 'port'];
 
-    public function _initialize()
+    public function _initialize(): void
     {
         $url = trim($this->config['url'], '/') . ':' . $this->config['port'];
 
@@ -74,18 +76,12 @@ class MailHog extends Module
             $timeout = $this->config['timeout'];
         }
         $this->mailhog = new \GuzzleHttp\Client(['base_uri' => $url, 'timeout' => $timeout]);
-
-        if (isset($this->config['guzzleRequestOptions'])) {
-            foreach ($this->config['guzzleRequestOptions'] as $option => $value) {
-                $this->mailhog->setDefaultOption($option, $value);
-            }
-        }
     }
 
     /**
      * Method executed after each scenario
      */
-    public function _after(\Codeception\TestCase $test)
+    public function _after(TestInterface $test): void
     {
         if (isset($this->config['deleteEmailsAfterScenario']) && $this->config['deleteEmailsAfterScenario']) {
             $this->deleteAllEmails();
@@ -97,7 +93,7 @@ class MailHog extends Module
      *
      * Accessible from tests, deletes all emails
      */
-    public function deleteAllEmails()
+    public function deleteAllEmails(): void
     {
         try {
             $this->mailhog->request('DELETE', '/api/v1/messages');
@@ -111,7 +107,7 @@ class MailHog extends Module
      *
      * Accessible from tests, fetches all emails
      */
-    public function fetchEmails()
+    public function fetchEmails(): void
     {
         $this->fetchedEmails = [];
 
@@ -135,7 +131,7 @@ class MailHog extends Module
      *
      * @param string $address Recipient address' inbox
      */
-    public function accessInboxFor($address)
+    public function accessInboxFor(string $address): void
     {
         $inbox = [];
 
@@ -162,7 +158,7 @@ class MailHog extends Module
      *
      * @param string $address Recipient address' inbox
      */
-    public function accessInboxForTo($address)
+    public function accessInboxForTo(string $address): void
     {
         $inbox = [];
 
@@ -181,7 +177,7 @@ class MailHog extends Module
      *
      * @param string $address Recipient address' inbox
      */
-    public function accessInboxForCc($address)
+    public function accessInboxForCc(string $address): void
     {
         $inbox = [];
 
@@ -200,7 +196,7 @@ class MailHog extends Module
      *
      * @param string $address Recipient address' inbox
      */
-    public function accessInboxForBcc($address)
+    public function accessInboxForBcc(string $address): void
     {
         $inbox = [];
 
@@ -217,7 +213,7 @@ class MailHog extends Module
      *
      * Pops the most recent unread email and assigns it as the email to conduct tests on
      */
-    public function openNextUnreadEmail()
+    public function openNextUnreadEmail(): void
     {
         $this->openedEmail = $this->getMostRecentUnreadEmail();
     }
@@ -228,9 +224,9 @@ class MailHog extends Module
      * Main method called by the tests, providing either the currently open email or the next unread one
      *
      * @param bool $fetchNextUnread Goes to the next Unread Email
-     * @return mixed Returns a JSON encoded Email
+     * @return object Returns a JSON encoded Email
      */
-    protected function getOpenedEmail($fetchNextUnread = false)
+    protected function getOpenedEmail(bool $fetchNextUnread = false): object
     {
         if ($fetchNextUnread || $this->openedEmail == null) {
             $this->openNextUnreadEmail();
@@ -244,9 +240,9 @@ class MailHog extends Module
      *
      * Pops the most recent unread email, fails if the inbox is empty
      *
-     * @return mixed Returns a JSON encoded Email
+     * @return object Returns a JSON encoded Email
      */
-    protected function getMostRecentUnreadEmail()
+    protected function getMostRecentUnreadEmail(): object
     {
         if (empty($this->unreadInbox)) {
             $this->fail('Unread Inbox is Empty');
@@ -262,9 +258,9 @@ class MailHog extends Module
      * Returns the full content of an email
      *
      * @param string $id ID from the header
-     * @return mixed Returns a JSON encoded Email
+     * @return object Returns a JSON encoded Email
      */
-    protected function getFullEmail($id)
+    protected function getFullEmail(string $id): object
     {
         try {
             $response = $this->mailhog->request('GET', "/api/v1/messages/{$id}");
@@ -279,11 +275,8 @@ class MailHog extends Module
      * Get Email Subject
      *
      * Returns the subject of an email
-     *
-     * @param mixed $email Email
-     * @return string Subject
      */
-    protected function getEmailSubject($email)
+    protected function getEmailSubject(object $email): string
     {
         return $this->getDecodedEmailProperty($email, $email->Content->Headers->Subject[0]);
     }
@@ -292,11 +285,8 @@ class MailHog extends Module
      * Get Email Body
      *
      * Returns the body of an email
-     *
-     * @param mixed $email Email
-     * @return string Body
      */
-    protected function getEmailBody($email)
+    protected function getEmailBody(object $email): string
     {
         return $this->getDecodedEmailProperty($email, $email->Content->Body);
     }
@@ -305,11 +295,8 @@ class MailHog extends Module
      * Get Email To
      *
      * Returns the string containing the persons included in the To field
-     *
-     * @param mixed $email Email
-     * @return string To
      */
-    protected function getEmailTo($email)
+    protected function getEmailTo(object $email): string
     {
         return $this->getDecodedEmailProperty($email, $email->Content->Headers->To[0]);
     }
@@ -318,11 +305,8 @@ class MailHog extends Module
      * Get Email CC
      *
      * Returns the string containing the persons included in the CC field
-     *
-     * @param mixed $email Email
-     * @return string CC
      */
-    protected function getEmailCC($email)
+    protected function getEmailCC(object $email): string
     {
         $emailCc = '';
         if (isset($email->Content->Headers->Cc)) {
@@ -335,11 +319,8 @@ class MailHog extends Module
      * Get Email BCC
      *
      * Returns the string containing the persons included in the BCC field
-     *
-     * @param mixed $email Email
-     * @return string BCC
      */
-    protected function getEmailBCC($email)
+    protected function getEmailBCC(object $email): string
     {
         $emailBcc = '';
         if (isset($email->Content->Headers->Bcc)) {
@@ -352,11 +333,8 @@ class MailHog extends Module
      * Get Email Recipients
      *
      * Returns the string containing all of the recipients, such as To, CC and if provided BCC
-     *
-     * @param mixed $email Email
-     * @return string Recipients
      */
-    protected function getEmailRecipients($email)
+    protected function getEmailRecipients(object $email): string
     {
         $recipients = [];
         if (isset($email->Content->Headers->To)) {
@@ -378,11 +356,8 @@ class MailHog extends Module
      * Get Email Sender
      *
      * Returns the string containing the sender of the email
-     *
-     * @param mixed $email Email
-     * @return string Sender
      */
-    protected function getEmailSender($email)
+    protected function getEmailSender(object $email): string
     {
         return $this->getDecodedEmailProperty($email, $email->Content->Headers->From[0]);
     }
@@ -391,11 +366,8 @@ class MailHog extends Module
      * Get Email Reply To
      *
      * Returns the string containing the address to reply to
-     *
-     * @param mixed $email Email
-     * @return string ReplyTo
      */
-    protected function getEmailReplyTo($email)
+    protected function getEmailReplyTo(object $email): string
     {
         return $this->getDecodedEmailProperty($email, $email->Content->Headers->{'Reply-To'}[0]);
     }
@@ -404,22 +376,16 @@ class MailHog extends Module
      * Get Email Priority
      *
      * Returns the priority of the email
-     *
-     * @param mixed $email Email
-     * @return string Priority
      */
-    protected function getEmailPriority($email)
+    protected function getEmailPriority(object $email): string
     {
         return $this->getDecodedEmailProperty($email, $email->Content->Headers->{'X-Priority'}[0]);
     }
 
     /**
      * Returns the decoded email property
-     *
-     * @param string $property
-     * @return string
      */
-    protected function getDecodedEmailProperty($email, $property)
+    protected function getDecodedEmailProperty(object $email, string $property): string
     {
         if ((string)$property != '') {
             if (!empty($email->Content->Headers->{'Content-Transfer-Encoding'}) &&
@@ -444,9 +410,9 @@ class MailHog extends Module
      *
      * Sets the current inbox to work on, also create a copy of it to handle unread emails
      *
-     * @param array $inbox Inbox
+     * @param array<object> $inbox Inbox
      */
-    protected function setCurrentInbox($inbox)
+    protected function setCurrentInbox(array $inbox): void
     {
         $this->currentInbox = $inbox;
         $this->unreadInbox = $inbox;
@@ -457,9 +423,9 @@ class MailHog extends Module
      *
      * Returns the complete current inbox
      *
-     * @return array Current Inbox
+     * @return array<object> Current Inbox
      */
-    protected function getCurrentInbox()
+    protected function getCurrentInbox(): array
     {
         return $this->currentInbox;
     }
@@ -469,9 +435,9 @@ class MailHog extends Module
      *
      * Returns the inbox containing unread emails
      *
-     * @return array Unread Inbox
+     * @return array<object> Unread Inbox
      */
-    protected function getUnreadInbox()
+    protected function getUnreadInbox(): array
     {
         return $this->unreadInbox;
     }
@@ -481,9 +447,9 @@ class MailHog extends Module
      *
      * Sorts the inbox based on the timestamp
      *
-     * @param array $inbox Inbox to sort
+     * @param array<object> $inbox Inbox to sort
      */
-    protected function sortEmails($inbox)
+    protected function sortEmails(array $inbox): void
     {
         usort($inbox, [$this, 'sortEmailsByCreationDatePredicate']);
     }
@@ -492,12 +458,8 @@ class MailHog extends Module
      * Get Email To
      *
      * Returns the string containing the persons included in the To field
-     *
-     * @param mixed $emailA Email
-     * @param mixed $emailB Email
-     * @return int Which email should go first
      */
-    public static function sortEmailsByCreationDatePredicate($emailA, $emailB)
+    public static function sortEmailsByCreationDatePredicate(object $emailA, object $emailB): int
     {
         $sortKeyA = $emailA->Content->Headers->Date;
         $sortKeyB = $emailB->Content->Headers->Date;

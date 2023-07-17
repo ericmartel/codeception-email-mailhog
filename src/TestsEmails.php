@@ -17,7 +17,7 @@ trait TestsEmails
      *
      * Checks if there are any emails in the inbox
      */
-    public function haveEmails()
+    public function haveEmails(): void
     {
         $currentInbox = $this->getCurrentInbox();
         $this->assertGreaterThan(0, count($currentInbox));
@@ -29,7 +29,7 @@ trait TestsEmails
      * Checks that the amount of emails in the inbox is exactly $expected
      * @params int $expected Number of expected emails
      */
-    public function haveNumberOfEmails($expected)
+    public function haveNumberOfEmails(int $expected): void
     {
         $currentInbox = $this->getCurrentInbox();
         $this->assertEquals($expected, count($currentInbox));
@@ -40,7 +40,7 @@ trait TestsEmails
      *
      * Checks that there are no emails in the inbox
      */
-    public function dontHaveEmails()
+    public function dontHaveEmails(): void
     {
         $currentInbox = $this->getCurrentInbox();
         $this->assertEquals(0, count($currentInbox));
@@ -51,7 +51,7 @@ trait TestsEmails
      *
      * Checks that there is at least one unread email
      **/
-    public function haveUnreadEmails()
+    public function haveUnreadEmails(): void
     {
         $unreadInbox = $this->getUnreadInbox();
         $this->assertGreaterThan(0, count($unreadInbox));
@@ -63,7 +63,7 @@ trait TestsEmails
      * Checks that the amount of emails in the unread inbox is exactly $expected
      * @params int $expected Number of expected emails
      */
-    public function haveNumberOfUnreadEmails($expected)
+    public function haveNumberOfUnreadEmails(int $expected): void
     {
         $unreadInbox = $this->getUnreadInbox();
         $this->assertEquals($expected, count($unreadInbox));
@@ -74,7 +74,7 @@ trait TestsEmails
      *
      * Checks that there are no unread emails in the inbox
      */
-    public function dontHaveUnreadEmails()
+    public function dontHaveUnreadEmails(): void
     {
         $unreadInbox = $this->getUnreadInbox();
         $this->assertEquals(0, count($unreadInbox));
@@ -87,7 +87,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function seeInOpenedEmailBody($expected)
+    public function seeInOpenedEmailBody(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->seeInEmailBody($email, $expected);
@@ -100,7 +100,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function seeInOpenedEmailSubject($expected)
+    public function seeInOpenedEmailSubject(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->seeInEmailSubject($email, $expected);
@@ -113,7 +113,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function dontSeeInOpenedEmailBody($expected)
+    public function dontSeeInOpenedEmailBody(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->dontSeeInEmailBody($email, $expected);
@@ -126,7 +126,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function dontSeeInOpenedEmailSubject($expected)
+    public function dontSeeInOpenedEmailSubject(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->dontSeeInEmailSubject($email, $expected);
@@ -137,10 +137,10 @@ trait TestsEmails
      *
      * Checks that the body of $email contains $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function seeInEmailBody($email, $expected)
+    public function seeInEmailBody(object $email, string $expected): void
     {
         $this->assertStringContainsString($expected, $this->getEmailBody($email), 'Email Body Contains');
     }
@@ -150,10 +150,10 @@ trait TestsEmails
      *
      * Checks that the body of $email does not contain $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function dontSeeInEmailBody($email, $expected)
+    public function dontSeeInEmailBody(object $email, string $expected): void
     {
         $this->assertStringNotContainsString($expected, $this->getEmailBody($email), "Email Body Doesn't Contain");
     }
@@ -163,10 +163,10 @@ trait TestsEmails
      *
      * Checks that the subject of $email contains $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function seeInEmailSubject($email, $expected)
+    public function seeInEmailSubject(object $email, string $expected): void
     {
         $this->assertStringContainsString($expected, $this->getEmailSubject($email), 'Email Subject Contains');
     }
@@ -176,10 +176,10 @@ trait TestsEmails
      *
      * Checks that the subject of $email does not contain $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function dontSeeInEmailSubject($email, $expected)
+    public function dontSeeInEmailSubject(object $email, string $expected): void
     {
         $this->assertStringNotContainsString($expected, $this->getEmailSubject($email), "Email Subject Doesn't Contain");
     }
@@ -191,7 +191,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function seeInOpenedEmailSender($expected)
+    public function seeInOpenedEmailSender(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->seeInEmailSender($email, $expected);
@@ -204,7 +204,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function dontSeeInOpenedEmailSender($expected)
+    public function dontSeeInOpenedEmailSender(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->dontSeeInEmailSender($email, $expected);
@@ -215,10 +215,10 @@ trait TestsEmails
      *
      * Checks if the sender of $email contains $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function seeInEmailSender($email, $expected)
+    public function seeInEmailSender(object $email, string $expected): void
     {
         $this->assertStringContainsString($expected, $this->getEmailSender($email));
     }
@@ -228,10 +228,10 @@ trait TestsEmails
      *
      * Checks if the sender of $email does not contain $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function dontSeeInEmailSender($email, $expected)
+    public function dontSeeInEmailSender(object $email, string $expected): void
     {
         $this->assertStringNotContainsString($expected, $this->getEmailSender($email));
     }
@@ -243,7 +243,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function seeInOpenedEmailReplyTo($expected)
+    public function seeInOpenedEmailReplyTo(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->seeInEmailReplyTo($email, $expected);
@@ -256,7 +256,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function dontSeeInOpenedEmailReplyTo($expected)
+    public function dontSeeInOpenedEmailReplyTo(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->dontSeeInEmailReplyTo($email, $expected);
@@ -267,10 +267,10 @@ trait TestsEmails
      *
      * Checks if the ReplyTo of $email contains $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function seeInEmailReplyTo($email, $expected)
+    public function seeInEmailReplyTo(object $email, string $expected): void
     {
         $this->assertStringContainsString($expected, $this->getEmailReplyTo($email));
     }
@@ -280,10 +280,10 @@ trait TestsEmails
      *
      * Checks if the ReplyTo of $email does not contain $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function dontSeeInEmailReplyTo($email, $expected)
+    public function dontSeeInEmailReplyTo(object $email, string $expected): void
     {
         $this->assertStringNotContainsString($expected, $this->getEmailReplyTo($email));
     }
@@ -295,7 +295,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function seeInOpenedEmailRecipients($expected)
+    public function seeInOpenedEmailRecipients(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->seeInEmailRecipients($email, $expected);
@@ -308,7 +308,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function dontSeeInOpenedEmailRecipients($expected)
+    public function dontSeeInOpenedEmailRecipients(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->dontSeeInEmailRecipients($email, $expected);
@@ -319,10 +319,10 @@ trait TestsEmails
      *
      * Checks that the recipients of $email contain $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function seeInEmailRecipients($email, $expected)
+    public function seeInEmailRecipients(object $email, string $expected): void
     {
         $this->assertStringContainsString($expected, $this->getEmailRecipients($email));
     }
@@ -332,10 +332,10 @@ trait TestsEmails
      *
      * Checks that the recipients of $email do not contain $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function dontSeeInEmailRecipients($email, $expected)
+    public function dontSeeInEmailRecipients(object $email, string $expected): void
     {
         $this->assertStringNotContainsString($expected, $this->getEmailRecipients($email));
     }
@@ -347,7 +347,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function seeInOpenedEmailToField($expected)
+    public function seeInOpenedEmailToField(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->seeInEmailToField($email, $expected);
@@ -360,7 +360,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function dontSeeInOpenedEmailToField($expected)
+    public function dontSeeInOpenedEmailToField(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->dontSeeInEmailToField($email, $expected);
@@ -371,10 +371,10 @@ trait TestsEmails
      *
      * Checks that the To field of $email contains $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function seeInEmailToField($email, $expected)
+    public function seeInEmailToField(object $email, string $expected): void
     {
         $this->assertStringContainsString($expected, $this->getEmailTo($email));
     }
@@ -384,10 +384,10 @@ trait TestsEmails
      *
      * Checks that the To field of $email does not contain $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function dontSeeInEmailToField($email, $expected)
+    public function dontSeeInEmailToField(object $email, string $expected): void
     {
         $this->assertStringNotContainsString($expected, $this->getEmailTo($email));
     }
@@ -399,7 +399,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function seeInOpenedEmailCCField($expected)
+    public function seeInOpenedEmailCCField(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->seeInEmailCCField($email, $expected);
@@ -412,7 +412,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function dontSeeInOpenedEmailCCField($expected)
+    public function dontSeeInOpenedEmailCCField(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->dontSeeInEmailCCField($email, $expected);
@@ -423,10 +423,10 @@ trait TestsEmails
      *
      * Checks that the CC field of $email contains $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function seeInEmailCCField($email, $expected)
+    public function seeInEmailCCField(object $email, string $expected): void
     {
         $this->assertStringContainsString($expected, $this->getEmailCC($email));
     }
@@ -436,10 +436,10 @@ trait TestsEmails
      *
      * Checks that the CC field of $email does not contain $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function dontSeeInEmailCCField($email, $expected)
+    public function dontSeeInEmailCCField(object $email, string $expected): void
     {
         $this->assertStringNotContainsString($expected, $this->getEmailCC($email));
     }
@@ -453,7 +453,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function seeInOpenedEmailBCCField($expected)
+    public function seeInOpenedEmailBCCField(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->seeInEmailBCCField($email, $expected);
@@ -468,7 +468,7 @@ trait TestsEmails
      *
      * @param string $expected Text
      */
-    public function dontSeeInOpenedEmailBCCField($expected)
+    public function dontSeeInOpenedEmailBCCField(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->dontSeeInEmailBCCField($email, $expected);
@@ -481,10 +481,10 @@ trait TestsEmails
      *
      * Warning: it is possible for an email to have its BCC field empty, it doesn't mean that another instance of the same email doesn't exist.
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function seeInEmailBCCField($email, $expected)
+    public function seeInEmailBCCField(object $email, string $expected): void
     {
         $this->assertStringContainsString($expected, $this->getEmailBCC($email));
     }
@@ -496,10 +496,10 @@ trait TestsEmails
      *
      * Warning: it is possible for an email to have its BCC field empty, it doesn't mean that another instance of the same email doesn't exist.
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected Text
      */
-    public function dontSeeInEmailBCCField($email, $expected)
+    public function dontSeeInEmailBCCField(object $email, string $expected): void
     {
         $this->assertStringNotContainsString($expected, $this->getEmailBCC($email));
     }
@@ -511,7 +511,7 @@ trait TestsEmails
      *
      * @param string $expected priority
      */
-    public function seeInOpenedEmailPriority($expected)
+    public function seeInOpenedEmailPriority(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->seeInEmailPriority($email, $expected);
@@ -524,7 +524,7 @@ trait TestsEmails
      *
      * @param string $expected priority
      */
-    public function dontSeeInOpenedEmailPriority($expected)
+    public function dontSeeInOpenedEmailPriority(string $expected): void
     {
         $email = $this->getOpenedEmail();
         $this->dontSeeInEmailPriority($email, $expected);
@@ -535,10 +535,10 @@ trait TestsEmails
      *
      * Checks that the priority of $email contains $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected priority
      */
-    public function seeInEmailPriority($email, $expected)
+    public function seeInEmailPriority(object $email, string $expected): void
     {
         $this->assertStringContainsString($expected, $this->getEmailPriority($email));
     }
@@ -548,19 +548,19 @@ trait TestsEmails
      *
      * Checks that the priority of $email does not contain $expected
      *
-     * @param mixed $email a JSON encoded email
+     * @param object $email a JSON encoded email
      * @param string $expected priority
      */
-    public function dontSeeInEmailPriority($email, $expected)
+    public function dontSeeInEmailPriority(object $email, string $expected): void
     {
         $this->assertStringNotContainsString($expected, $this->getEmailPriority($email));
     }
 
     /**
      * @param string $content_type_alternative      MIME-part Content-Type
-     * @return string Body
+     * @return null|string Body
      */
-    public function grabBodyFromEmail($content_type_alternative = null)
+    public function grabBodyFromEmail(string $content_type_alternative = null): ?string
     {
         $email = $this->getOpenedEmail();
 

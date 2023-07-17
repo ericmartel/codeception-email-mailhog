@@ -1,0 +1,41 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$Body\\.$#"
+			count: 1
+			path: src/MailHog.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$Content\\.$#"
+			count: 11
+			path: src/MailHog.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$MIME\\.$#"
+			count: 1
+			path: src/MailHog.php
+
+		-
+			message: "#^Cannot access property \\$ID on object\\|null\\.$#"
+			count: 1
+			path: src/MailHog.php
+
+		-
+			message: "#^Method Codeception\\\\Module\\\\MailHog\\:\\:getFullEmail\\(\\) should return object but returns mixed\\.$#"
+			count: 1
+			path: src/MailHog.php
+
+		-
+			message: "#^Parameter \\#1 \\$inbox of method Codeception\\\\Module\\\\MailHog\\:\\:sortEmails\\(\\) expects array\\<object\\>, mixed given\\.$#"
+			count: 1
+			path: src/MailHog.php
+
+		-
+			message: "#^Property Codeception\\\\Module\\\\MailHog\\:\\:\\$fetchedEmails \\(array\\<object\\>\\) does not accept mixed\\.$#"
+			count: 1
+			path: src/MailHog.php
+
+		-
+			message: "#^Variable \\$response might not be defined\\.$#"
+			count: 1
+			path: src/MailHog.php
