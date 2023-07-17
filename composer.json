@@ -16,5 +16,8 @@
         "psr-4": {
             "Codeception\\Module\\": "src"
         }
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.22"
     }
 }
