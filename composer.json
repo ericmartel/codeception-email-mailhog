@@ -1,5 +1,5 @@
 {
-    "name": "ericmartel/codeception-email-mailhog",
+    "name": "saccas/codeception-email-mailhog",
     "description": "Provides test helpers for Codeception when testing email functionality with MailHog",
     "license": "MIT",
     "authors": [
